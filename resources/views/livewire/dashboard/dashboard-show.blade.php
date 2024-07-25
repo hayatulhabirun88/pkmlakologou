@@ -33,7 +33,7 @@
                                             <p class="text-muted">BEROBAT</p>
                                         </div>
                                         <div class="ms-auto">
-                                            <h2 class="counter text-cyan">169</h2>
+                                            <h2 class="counter text-cyan">{{ $totalBerobat }}</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -53,7 +53,7 @@
                                             <p class="text-muted">RESEP</p>
                                         </div>
                                         <div class="ms-auto">
-                                            <h2 class="counter text-purple">157</h2>
+                                            <h2 class="counter text-purple">{{ $totalResep }}</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -92,13 +92,13 @@
                     <h5 class="card-title">Pendaftaran</h5>
                     <div class="stats-row m-t-20 m-b-20">
                         <div class="stat-item">
-                            <h6>Tahunan</h6> <b>80.40%</b>
+                            <h6>Tahunan</h6> <b>{{ $totalPendaftaranPertahun }}</b>
                         </div>
                         <div class="stat-item">
-                            <h6>Bulanan</h6> <b>20.40%</b>
+                            <h6>Bulanan</h6> <b>{{ $totalPendaftaranPerbulan }}</b>
                         </div>
                         <div class="stat-item">
-                            <h6>Harian</h6> <b>5.40%</b>
+                            <h6>Harian</h6> <b>{{ $totalPendaftaranHariIni }}</b>
                         </div>
                     </div>
                 </div>
@@ -114,13 +114,13 @@
                     <h5 class="card-title">Berobat</h5>
                     <div class="stats-row m-t-20 m-b-20">
                         <div class="stat-item">
-                            <h6>Tahunan</h6> <b>80.40%</b>
+                            <h6>Tahunan</h6> <b>{{ $totalBerobatTahunIni }}</b>
                         </div>
                         <div class="stat-item">
-                            <h6>Bulanan</h6> <b>20.40%</b>
+                            <h6>Bulanan</h6> <b>{{ $totalBerobatBulanIni }}</b>
                         </div>
                         <div class="stat-item">
-                            <h6>Harian</h6> <b>5.40%</b>
+                            <h6>Harian</h6> <b>{{ $totalBerobatHariIni }}</b>
                         </div>
                     </div>
                 </div>
@@ -136,13 +136,13 @@
                     <h5 class="card-title">Resep</h5>
                     <div class="stats-row m-t-20 m-b-20">
                         <div class="stat-item">
-                            <h6>Tahunan</h6> <b>80.40%</b>
+                            <h6>Tahunan</h6> <b>{{ $totalResepTahunIni }}</b>
                         </div>
                         <div class="stat-item">
-                            <h6>Bulanan</h6> <b>20.40%</b>
+                            <h6>Bulanan</h6> <b>{{ $totalResepBulanIni }}</b>
                         </div>
                         <div class="stat-item">
-                            <h6>Harian</h6> <b>5.40%</b>
+                            <h6>Harian</h6> <b>{{ $totalResepHariIni }}</b>
                         </div>
                     </div>
                 </div>
