@@ -2,20 +2,25 @@
 
 namespace App\Livewire\Obat;
 
+use Carbon\Carbon;
 use App\Models\Obat;
 use Livewire\Component;
 use App\Models\LokasiObat;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ObatIndex extends Component
 {
-
+    use WithFileUploads;
     use WithPagination;
 
     protected $paginationTheme = 'bootstrap';
 
-    public $kode_obat, $nama_obat, $tgl_expire, $stok, $qty, $satuan, $keterangan, $lokasi_obat_id, $selectedId;
+    public $kode_obat, $nama_obat, $tgl_expire, $stok, $qty, $satuan, $keterangan, $lokasi_obat_id, $selectedId, $file;
     public $isOpen = false;
+    public $isOpenImportObat = false;
     public $isOpenDelete = false;
     protected $updatesQueryString = ['search'];
     public $search = '';
@@ -33,6 +38,92 @@ class ObatIndex extends Component
         $this->isOpen = true;
         $this->isOpenDelete = false;
         $this->selectedId = null;
+    }
+
+    public function showImport()
+    {
+        $this->isOpenImportObat = true;
+    }
+
+    public function import()
+    {
+        $this->validate([
+            'file' => 'required|file|mimes:xls,xlsx,csv',
+        ], [
+            'file.required' => 'File harus diunggah.',
+            'file.mimes' => 'Format file yang diizinkan adalah xls, xlsx, atau csv.',
+            'file.file' => 'Pastikan file yang diunggah valid.',
+        ]);
+
+        // Menyimpan file sementara
+        $filePath = $this->file->getRealPath();
+
+        // Memuat spreadsheet dari file
+        $spreadsheet = IOFactory::load($filePath);
+
+        // Ambil sheet pertama
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Ambil data dalam bentuk array
+        $rows = $sheet->toArray();
+
+        DB::beginTransaction();
+        try {
+
+            DB::table('obats')->truncate();
+
+            foreach ($rows as $index => $row) {
+                // Lewati baris pertama jika itu adalah header
+                if ($index == 0) {
+                    continue;
+                }
+
+                // Inisialisasi variabel
+                $tglExpire = null;
+                $stok = null;
+
+                try {
+                    // Cek apakah nilainya adalah tanggal valid sebelum parsing
+                    if (strtotime($row[2])) {
+                        $tglExpire = Carbon::parse($row[2])->format('Y-m-d');
+                    }
+                } catch (Exception $e) {
+                    // Jika terjadi kesalahan saat parsing, tetapkan null
+                    $tglExpire = null;
+                }
+
+                // Validasi stok apakah angka valid
+                if (is_numeric($row[3])) {
+                    $stok = $row[3];
+                } else {
+                    $stok = 0; // Anda bisa menetapkan nilai default, misalnya 0 jika stok tidak valid
+                }
+
+                try {
+                    // Simpan data ke database
+                    Obat::create([
+                        'kode_obat' => $row[0],
+                        'nama_obat' => $row[1],
+                        'tgl_expire' => $tglExpire,
+                        'stok' => $stok,
+                        'satuan' => $row[4] ?? null,  // Gunakan null jika kolom kosong
+                        'keterangan' => $row[5] ?? null,  // Gunakan null jika kolom kosong
+                        'lokasi_obat_id' => $row[6] ?? null,  // Gunakan null jika kolom kosong
+                    ]);
+                } catch (\Exception $e) {
+                    // Jika ada kesalahan di baris tertentu, tampilkan pesan dan lanjutkan
+                    session()->flash('error', 'Kesalahan pada baris ke-' . ($index + 1) . ': ' . $e->getMessage());
+                }
+            }
+
+            DB::commit();
+            session()->flash('message', 'Data berhasil diimpor.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            session()->flash('error', 'Terjadi kesalahan umum: ' . $e->getMessage());
+        }
+        $this->isOpenImportObat = false;
+        return redirect()->to('/obat');
     }
 
 
@@ -116,6 +207,7 @@ class ObatIndex extends Component
 
     public function deleteshow($id)
     {
+        $this->isOpenImportObat = false;
         $this->isOpenDelete = true;
         $this->isOpen = false;
         $this->selectedId = $id;

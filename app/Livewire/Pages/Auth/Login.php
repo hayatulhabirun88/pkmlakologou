@@ -26,12 +26,26 @@ class Login extends Component
     public function login()
     {
 
+        $key = 'login_attempts:' . request()->ip();
+
+        $limiter = app('Illuminate\Cache\RateLimiter');
+
+        if ($limiter->tooManyAttempts($key, 10)) {
+            throw ValidationException::withMessages([
+                'email' => ['Terlalu banyak percobaan login. Coba lagi nanti.'],
+            ]);
+        }
+
         $this->validate();
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
-            Session::regenerate();
+            $limiter->clear($key);
+            session()->regenerate();
             return redirect()->intended('dashboard');
         }
+
+
+        $limiter->hit($key, 60);
 
         throw ValidationException::withMessages([
             'email' => ['Email atau password salah.'],

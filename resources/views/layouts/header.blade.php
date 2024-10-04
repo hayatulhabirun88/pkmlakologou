@@ -6,7 +6,7 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="/dashboard">
 
-                <img style="width:50px;" src="{{ asset('/') }}logopuskesmas.png" alt="homepage" class="dark-logo">
+                <img style="width:100px;" src="{{ asset('/') }}logodashboard.png" alt="homepage" class="dark-logo">
             </a>
 
         </div>

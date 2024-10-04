@@ -9,8 +9,19 @@
     <div class="d-flex justify-content-between mb-3">
         <h4 class="d-inline">Obat</h4>
 
-        <button class="d-inline-block float-end btn btn-info mb-3 " data-bs-toggle="modal" data-bs-target="#modalObat"
-            wire:click.prevent="tambah()">Tambah</button>
+        <div style="float: right;">
+            <div class="row">
+                <div class="col-md-6"><button type="submit" class="d-inline-block float-end btn btn-success mb-3 "
+                        data-bs-toggle="modal" data-bs-target="#modalImportObat" wire:click.prevent="showImport()">
+                        Import </button></div>
+                <div class="col-md-6"><button class="d-inline-block float-end btn btn-info mb-3 " data-bs-toggle="modal"
+                        data-bs-target="#modalObat" wire:click.prevent="tambah()">Tambah</button></div>
+
+            </div>
+
+
+        </div>
+
     </div>
 
 
@@ -115,6 +126,53 @@
         </div>
     </div>
 
+    <div class="modal" id="modalImportObat" tabindex="-1" aria-labelledby="modalImportObatLabel1"
+        aria-hidden="true" style="display: {{ $isOpenImportObat ? 'block' : 'none' }};">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalPasienLabel1">
+                        {{ $selectedId ? 'Ubah Data Obat' : 'Import Data Obat' }}
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true"></span></button>
+
+                </div>
+                <div class="modal-body">
+                    @if (session()->has('success'))
+                        <div class="alert alert-success bg-success text-light border-0 alert-dismissible fade show"
+                            role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                        </div>
+                    @elseif (session()->has('error'))
+                        <div class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show"
+                            role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                        </div>
+                    @endif
+                    <form wire:submit.prevent="import">
+                        <div class="mb-3">
+                            <label for="nama_obat" class="form-label">Masukan file Excel Data Obat</label>
+                            <input type="file" class="form-control" id="nama_obat" wire:model="file">
+                            @error('file')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Import Data
+                        Obat</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="deleteObat" tabindex="-1" aria-labelledby="deleteObatLabel1" aria-hidden="true"
         style="display: {{ $isOpenDelete ? 'block' : 'none' }};">
         <div class="modal-dialog modal-sm" role="document">
@@ -164,7 +222,7 @@
                         <td>{{ $obat->stok }}</td>
                         <td>{{ $obat->satuan }}</td>
                         <td>{{ $obat->keterangan }}</td>
-                        <td>{{ $obat->lokasi_obat->kode_rak . '' . $obat->lokasi_obat->tempat }}</td>
+                        <td>{{ @$obat->lokasi_obat->kode_rak . '' . @$obat->lokasi_obat->tempat }}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalObat"
                                 wire:click.prevent="edit('{{ $obat->id }}')"><i class="fa fa-edit"></i></button>
