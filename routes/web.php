@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Mobile\DashboardMController;
+use App\Http\Controllers\ObatMController;
 use App\Livewire\Pages\Auth\Login;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -11,6 +13,7 @@ use App\Http\Controllers\BerobatController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PendaftaranController;
+use App\Http\Controllers\Mobile\AuthLoginController;
 
 
 /*
@@ -43,5 +46,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/berobat', [BerobatController::class, 'index'])->name('berobat');
     Route::get('/resep', [ResepController::class, 'index'])->name('resep');
 });
+
+// Login
+Route::get('/apps/login', [AuthLoginController::class, 'login'])->name('mobile.login');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/apps/dashboard', [DashboardMController::class, 'index'])->name('mobile.dashboard');
+    Route::get('/apps/obat-masuk', [ObatMController::class, 'obat_masuk'])->name('mobile.obat-masuk');
+});
+
+
 
 // require __DIR__.'/auth.php';
