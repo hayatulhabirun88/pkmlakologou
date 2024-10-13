@@ -1,8 +1,8 @@
 @extends('mobile.template')
 
-@section('title', 'Obat Masuk - PKM Lakologou')
+@section('title', 'Transaksi Obat Masuk - PKM Lakologou')
 
-@section('title-header', 'Obat Masuk')
+@section('title-header', 'Transaksi Obat Masuk')
 
 @section('content')
     <div class="page-content-wrapper py-3">
@@ -13,5 +13,5 @@
             </div>
         </div>
 
-        @livewire('mobile.obat-masuk-index')
+        @livewire('obat.transaksi-obat-masuk')
     @endsection

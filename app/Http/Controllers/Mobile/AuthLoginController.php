@@ -13,5 +13,11 @@ class AuthLoginController extends Controller
         return view('mobile.auth.login');
     }
 
+    public function logout()
+    {
+        auth()->logout();
+        return redirect()->route('mobile.login');
+    }
+
 
 }

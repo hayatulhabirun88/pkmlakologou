@@ -10,4 +10,14 @@ class ObatMController extends Controller
     {
         return view('mobile.obat.obat_masuk');
     }
+
+    public function transaksi()
+    {
+        return view('mobile.obat.transaksi-obat-masuk');
+    }
+
+    public function cek_stok()
+    {
+        return view('mobile.obat.cek_stok');
+    }
 }

@@ -10,9 +10,8 @@ use App\Models\LokasiObat;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class ObatIndex extends Component
+class CekStok extends Component
 {
     use WithFileUploads;
     use WithPagination;
@@ -236,6 +235,6 @@ class ObatIndex extends Component
         $obats = $query->latest()->paginate(10);
 
         $lokasiObats = LokasiObat::all();
-        return view('livewire.obat.obat-index', compact(['obats', 'lokasiObats']));
+        return view('livewire.obat.cek-stok', compact(['lokasiObats', 'obats']));
     }
 }

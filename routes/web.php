@@ -53,6 +53,9 @@ Route::get('/apps/login', [AuthLoginController::class, 'login'])->name('mobile.l
 Route::middleware(['auth'])->group(function () {
     Route::get('/apps/dashboard', [DashboardMController::class, 'index'])->name('mobile.dashboard');
     Route::get('/apps/obat-masuk', [ObatMController::class, 'obat_masuk'])->name('mobile.obat-masuk');
+    Route::get('/apps/transaksi-obat-masuk', [ObatMController::class, 'transaksi'])->name('mobile.transaksi.obatmasuk');
+    Route::get('/apps/cek-stok-obat', [ObatMController::class, 'cek_stok'])->name('mobile.cek_stok');
+    Route::get('/apps/logout', [AuthLoginController::class, 'logout'])->name('mobile.logout');
 });
 
 
