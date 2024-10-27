@@ -2,6 +2,16 @@
     <div class="container">
         <div class="card">
             <div class="card-body">
+                <div class="alert alert-danger">
+                    @php
+                        $expireobat = Obat::where('tgl_expire', '<', 5);
+                    @endphp
+                    <ul>
+                        @foreach ($expireobat as $exobat)
+                            <li></li>
+                        @endforeach
+                    </ul>
+                </div>
                 <div class="form-group">
                     <label class="form-label" for="cari_obat">Cari Obat</label>
                     <input class="form-control" id="cari_obat" type="text" placeholder="Cari Obat"
@@ -21,6 +31,7 @@
                                 <th>Kode Obat</th>
                                 <th>Nama Obat</th>
                                 <th>Stok</th>
+                                <th>Expire</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -30,6 +41,7 @@
                                     <td>{{ $item->kode_obat }}</td>
                                     <td>{{ $item->nama_obat }}</td>
                                     <td>{{ $item->stok }}</td>
+                                    <td>{{ $item->tgl_expire }}</td>
                                     <td>
 
                                         <button class="btn btn-sm btn-success" data-bs-toggle="modal"
@@ -77,6 +89,11 @@
                         <label for="stok" class="form-label">Tambahan Stok</label>
                         <input type="text" class="form-control" name="stok" id="stok"
                             aria-describedby="helpId" placeholder="Stok" wire:model="stok" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="expire" class="form-label">Expire</label>
+                        <input type="date" class="form-control" name="expire" id="expire"
+                            aria-describedby="helpId" placeholder="expire" wire:model="expire" />
                     </div>
 
                 </div>

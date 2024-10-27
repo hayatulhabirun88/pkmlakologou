@@ -17,7 +17,7 @@ class ObatMasukIndex extends Component
 
     public $search = '';
 
-    public $tambahObatId, $kode_obat, $nama_obat, $stok;
+    public $tambahObatId, $kode_obat, $nama_obat, $stok, $expire;
 
     public $isOpenTambahObat = false;
 
@@ -35,6 +35,7 @@ class ObatMasukIndex extends Component
         $this->tambahObatId = $id;
         $this->kode_obat = $obat->kode_obat;
         $this->nama_obat = $obat->nama_obat;
+        $this->expire = $obat->tgl_expire;
     }
 
     public function resetTambahObat()
@@ -42,6 +43,7 @@ class ObatMasukIndex extends Component
         $this->tambahObatId = null;
         $this->kode_obat = null;
         $this->nama_obat = null;
+        $this->expire = null;
         $this->stok = "";
     }
 
@@ -51,12 +53,14 @@ class ObatMasukIndex extends Component
             'kode_obat' => ['required', 'string', 'max:255'],
             'nama_obat' => ['required', 'string', 'max:255'],
             'stok' => ['required', 'integer'],
+            'expire' => ['required'],
         ]);
 
         $obat = Obat::where('kode_obat', $this->kode_obat)->first();
         if ($obat) {
             $obat->update([
                 'stok' => $obat->stok + $this->stok,
+                'tgl_expire' => $this->expire,
             ]);
 
             $obat_masuk = new ObatMasuk();
@@ -69,6 +73,7 @@ class ObatMasukIndex extends Component
                 'kode_obat' => $this->kode_obat,
                 'nama_obat' => $this->nama_obat,
                 'stok' => $this->stok,
+                'tgl_expire' => $this->expire,
                 'lokasi_obat_id' => 1,
             ]);
 

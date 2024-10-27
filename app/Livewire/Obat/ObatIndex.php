@@ -230,7 +230,8 @@ class ObatIndex extends Component
 
         if ($this->search !== null) {
             $query->where('nama_obat', 'like', '%' . $this->search . '%')
-                ->orWhere('keterangan', 'like', '%' . $this->search . '%');
+                ->orWhere('keterangan', 'like', '%' . $this->search . '%')
+                ->orWhere('kode_obat', 'like', '%' . $this->search . '%');
         }
 
         $obats = $query->latest()->paginate(10);
